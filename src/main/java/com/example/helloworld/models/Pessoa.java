@@ -1,24 +1,24 @@
 package com.example.helloworld.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import java.util.Objects;
 
-@Table(name = "pessoa")
+@Table(name = "PESSOAS")
 @Entity
-public class Pessoa {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class Pessoa extends BaseEntity {
 
+	@Column(name = "FIRST_NAME")
 	private String firstName;
+
+	@Column(name = "LAST_NAME")
 	private String lastName;
+
+	@Column(name = "IDADE")
 	private int idade;
+
+	@Column(name = "CPF")
 	private String cpf;
 
 	public Pessoa() {
@@ -29,10 +29,6 @@ public class Pessoa {
 		this.lastName = lastName;
 		this.idade = idade;
 		this.cpf = cpf;
-	}
-
-	public Long getId() {
-		return this.id;
 	}
 
 	public String getFirstName() {
@@ -68,17 +64,6 @@ public class Pessoa {
 	}
 
 	@Override
-	public String toString() {
-		return "{" +
-			" id='" + getId() + "'" +
-			", firstName='" + getFirstName() + "'" +
-			", lastName='" + getLastName() + "'" +
-			", idade='" + getIdade() + "'" +
-			", cpf='" + getCpf() + "'" +
-			"}";
-	}
-
-	@Override
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
@@ -86,12 +71,24 @@ public class Pessoa {
 			return false;
 		}
 		Pessoa pessoa = (Pessoa) o;
-		return Objects.equals(firstName, pessoa.firstName) && Objects.equals(lastName, pessoa.lastName) && idade == pessoa.idade && Objects.equals(cpf, pessoa.cpf);
+		return Objects.equals(getId(), pessoa.getId()) && Objects.equals(firstName, pessoa.firstName) && Objects.equals(lastName, pessoa.lastName)
+				&& idade == pessoa.idade && Objects.equals(cpf, pessoa.cpf);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, firstName, lastName, idade, cpf);
+		return Objects.hash(firstName, lastName, idade, cpf);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "{" +
+				" id='" + getId() +"'" +
+				", firstName='" + getFirstName() + "'" +
+				", lastName='" + getLastName() + "'" +
+				", idade='" + getIdade() + "'" +
+				", cpf='" + getCpf() + "'" +
+				"}";
+	}
+
 }

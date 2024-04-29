@@ -38,12 +38,10 @@ public class PessoaController {
 
 	@GetMapping("/pessoa/{id}")
 	public PessoaVO getPessoaById(@PathVariable Long id) {
-		Optional<Pessoa> optionalPessoa = pessoaRepository.findById(id);
+		Pessoa pessoa = pessoaRepository.findById(id);
 
 		PessoaVO pessoaVO = new PessoaVO();
-		if( optionalPessoa.isPresent() ) {
-			Pessoa pessoa = optionalPessoa.get();
-			
+		if( pessoa != null ) {
 			System.out.println(pessoa.getId());
 			pessoaVO = JsonUtil.jsonToObject(pessoa.toString(), PessoaVO.class);
 		}
