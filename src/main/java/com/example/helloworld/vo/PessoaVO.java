@@ -1,11 +1,11 @@
-package com.example.helloworld.utils.vo;
+package com.example.helloworld.vo;
 
 public class PessoaVO {
 
 	private Long id;
-	String firstName;
-	String lastName;
-	int idade;
+	private String firstName;
+	private String lastName;
+	private int idade;
 
 	public PessoaVO() {}
 
@@ -39,6 +39,16 @@ public class PessoaVO {
 
 	public void setIdade(int idade) {
 		this.idade = idade;
+	}
+
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", firstName='" + getFirstName() + "'" +
+			", lastName='" + getLastName() + "'" +
+			", idade='" + getIdade() + "'" +
+			"}";
 	}
 	
 }

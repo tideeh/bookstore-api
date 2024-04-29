@@ -1,15 +1,16 @@
 package com.example.helloworld.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.helloworld.models.Pessoa;
 
-public interface PessoaRepository extends Repository<Pessoa, Long> {
+public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
 
 	Pessoa save(Pessoa pessoa);
-	Pessoa findById(Long id);
+	Optional<Pessoa> findById(Long id);
 	List<Pessoa> findAll();
 	List<Pessoa> findByFirstNameIgnoreCase(String firstName);
 }
