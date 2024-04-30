@@ -10,8 +10,8 @@ import com.example.helloworld.utils.Resposta;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler({PessoaNotFoundException.class})
-	public ResponseEntity<Resposta> handlePessoaNotFoundException(PessoaNotFoundException exception) {
+	@ExceptionHandler({SearchNotFoundException.class})
+	public ResponseEntity<Resposta> SearchNotFoundException(SearchNotFoundException exception) {
 		Resposta resposta = new Resposta().setRetornoERRO(exception.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
 	}
