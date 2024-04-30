@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.helloworld.models.Pessoa;
 import com.example.helloworld.repositories.PessoaRepository;
 import com.example.helloworld.services.PessoaService;
-import com.example.helloworld.utils.JsonUtil;
-import com.example.helloworld.vo.PessoaVO;
+import com.example.helloworld.utils.exceptions.PessoaNotFoundException;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
@@ -19,44 +18,40 @@ public class PessoaServiceImpl implements PessoaService {
 	private PessoaRepository pessoaRepository;
 
 	@Override
-	public PessoaVO save(Pessoa pessoa) {
+	public Pessoa save(Pessoa pessoa) {
 		Pessoa pessoaSaved = pessoaRepository.save(pessoa);
-		return JsonUtil.jsonToObject(pessoaSaved.toString(), PessoaVO.class);
+		return pessoaSaved;
 	}
 
 	@Override
-	public PessoaVO findById(Long id) {
-		Pessoa pessoa = pessoaRepository.findById(id).orElseThrow();
-		PessoaVO pessoaVO = JsonUtil.jsonToObject(pessoa.toString(), PessoaVO.class);
-		return pessoaVO;
+	public Pessoa findById(Long id) {
+		return pessoaRepository.findById(id)
+				.orElseThrow(
+					() -> new PessoaNotFoundException("Pessoa not found with the given ID.")
+				);
 	}
 
 	@Override
-	public List<PessoaVO> findAll(String firstName) {
-		List<Pessoa> pessoas = new ArrayList<>();
+	public List<Pessoa> findAll(String firstName) {
+		List<Pessoa> pessoaList = new ArrayList<>();
 
 		if (firstName == null) {
-			pessoas = pessoaRepository.findAll();
+			pessoaList = pessoaRepository.findAll();
 		} else {
-			pessoas = pessoaRepository.findByFirstNameIgnoreCase(firstName);
+			pessoaList = pessoaRepository.findByFirstNameIgnoreCase(firstName);
 		}
 
-		List<PessoaVO> listPessoasVO = new ArrayList<>();
-		for (Pessoa pessoa : pessoas) {
-			listPessoasVO.add(JsonUtil.jsonToObject(pessoa.toString(), PessoaVO.class));
-		}
-
-		return listPessoasVO;
+		return pessoaList;
 	}
 
 	@Override
-	public boolean delete(Pessoa pessoa) {
-		if (pessoaRepository.findById(pessoa.getId()).isPresent()) {
-			pessoaRepository.delete(pessoa);
-			return true;
-		} else {
-			return false;
-		}
+	public void delete(Pessoa pessoa) {
+		pessoaRepository.findById(pessoa.getId())
+			.orElseThrow(
+				() -> new PessoaNotFoundException("Pessoa not found with the given ID.")
+			);
+		
+		pessoaRepository.delete(pessoa);
 	}
 
 }
