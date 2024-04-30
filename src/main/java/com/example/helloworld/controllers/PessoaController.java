@@ -1,6 +1,5 @@
 package com.example.helloworld.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +20,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class PessoaController {
 
 	@Autowired
-	PessoaService pessoaService;
+	private PessoaService pessoaService;
 
 	@PostMapping("/pessoa")
 	public PessoaVO createPessoa(@RequestBody Pessoa pessoa) {
-		return pessoaService.createPessoa(pessoa);
+		return pessoaService.save(pessoa);
 	}
 
 	@GetMapping("/pessoa/{id}")
 	public PessoaVO getPessoaById(@PathVariable Long id) {
-		return pessoaService.getPessoaById(id);
+		return pessoaService.findById(id);
 	}
 
 	@GetMapping("/pessoas")
 	public List<PessoaVO> getPessoas(@RequestParam(value = "firstName", required = false) String firstName) {
-		return pessoaService.getPessoas(firstName);
+		return pessoaService.findAll(firstName);
 	}
 	
 	@DeleteMapping("/pessoa")
