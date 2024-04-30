@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.helloworld.models.Pessoa;
-import com.example.helloworld.repositories.PessoaRepository;
 import com.example.helloworld.services.PessoaService;
-import com.example.helloworld.utils.JsonUtil;
 import com.example.helloworld.vo.PessoaVO;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +22,6 @@ public class PessoaController {
 
 	@Autowired
 	PessoaService pessoaService;
-
-	@Autowired
-	PessoaRepository pessoaRepository;
 
 	@PostMapping("/pessoa")
 	public PessoaVO createPessoa(@RequestBody Pessoa pessoa) {
@@ -40,6 +36,14 @@ public class PessoaController {
 	@GetMapping("/pessoas")
 	public List<PessoaVO> getPessoas(@RequestParam(value = "firstName", required = false) String firstName) {
 		return pessoaService.getPessoas(firstName);
+	}
+	
+	@DeleteMapping("/pessoa")
+	public String deletePessoa(@RequestBody Pessoa pessoa) {
+		if(pessoaService.delete(pessoa)) {
+			return "Success";
+		}
+		return "Failed to delete Pessoa";
 	}
 
 }

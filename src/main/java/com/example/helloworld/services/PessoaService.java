@@ -54,4 +54,16 @@ public class PessoaService {
 		return listPessoasVO;
 	}
 	
+	public boolean delete(Pessoa pessoa) {
+		try {
+			if(pessoaRepository.findById(pessoa.getId()).isPresent()) {
+				pessoaRepository.delete(pessoa);
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

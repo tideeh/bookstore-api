@@ -9,8 +9,8 @@ import com.example.helloworld.models.Pessoa;
 
 public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
 
-	Pessoa save(Pessoa pessoa);
-	Optional<Pessoa> findById(Long id);
-	List<Pessoa> findAll();
+	// Pessoa save(Pessoa pessoa);
+	// Optional<Pessoa> findById(Long id);
+	// List<Pessoa> findAll();
 	List<Pessoa> findByFirstNameIgnoreCase(String firstName);
 }
