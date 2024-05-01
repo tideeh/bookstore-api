@@ -12,13 +12,13 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler({SearchNotFoundException.class})
 	public ResponseEntity<Resposta> SearchNotFoundException(SearchNotFoundException exception) {
-		Resposta resposta = new Resposta().setRetornoERRO(exception.getMessage());
+		Resposta resposta = Resposta.setRetornoERRO(exception.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
 	}
 
 	@ExceptionHandler({RuntimeException.class})
 	public ResponseEntity<Resposta> handleRuntimeException(RuntimeException exception) {
-		Resposta resposta = new Resposta().setRetornoERRO(exception);
+		Resposta resposta = Resposta.setRetornoERRO(exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resposta);
     }
 	

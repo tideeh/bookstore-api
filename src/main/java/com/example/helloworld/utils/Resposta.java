@@ -14,14 +14,14 @@ public class Resposta {
 	private Object resultado;
 	private Object erro;
 
-	public Resposta setRetornoOK() {
+	public static Resposta setRetornoOK() {
 		Resposta resposta = new Resposta();
 		resposta.setCodigo(RETORNO_OK);
 		resposta.setMensagem(MENSAGEM_RETORNO_OK);
 		return resposta;
 	}
 
-	public Resposta setRetornoOK(Object resultado) {
+	public static Resposta setRetornoOK(Object resultado) {
 		Resposta resposta = new Resposta();
 		resposta.setCodigo(RETORNO_OK);
 		resposta.setResultado(resultado);
@@ -29,7 +29,7 @@ public class Resposta {
 		return resposta;
 	}
 
-	public Resposta setRetornoOK(Object resultado, String mensagem) {
+	public static Resposta setRetornoOK(Object resultado, String mensagem) {
 		Resposta resposta = new Resposta();
 		resposta.setCodigo(RETORNO_OK);
 		resposta.setResultado(resultado);
@@ -37,14 +37,14 @@ public class Resposta {
 		return resposta;
 	}
 
-	public Resposta setRetornoERRO(String mensagem) {
+	public static Resposta setRetornoERRO(String mensagem) {
 		Resposta resposta = new Resposta();
 		resposta.setCodigo(RETORNO_ERRO);
 		resposta.setMensagem(mensagem);
 		return resposta;
 	}
 
-	public Resposta setRetornoERRO(Throwable throwable) {
+	public static Resposta setRetornoERRO(Throwable throwable) {
 		Resposta resposta = new Resposta();
 		resposta.setCodigo(RETORNO_ERRO);
 		resposta.setMensagem(throwable.getMessage());
