@@ -9,13 +9,13 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>bookstore</artifactId>
+	<artifactId>bookstoreapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bookstore</name>
+	<name>bookstoreapi</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>19</java.version>
-		<start-class>com.example.bookstore.BookstoreApplication</start-class>
+		<start-class>com.example.bookstoreapi.BookstoreApiApplication</start-class>
 	</properties>
 	<dependencies>
 

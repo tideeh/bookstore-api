@@ -1,4 +1,4 @@
-package com.example.bookstore.models;
+package com.example.bookstoreapi.models;
 
 import java.time.LocalDateTime;
 

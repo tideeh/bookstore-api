@@ -1,4 +1,4 @@
-package com.example.bookstore.services.impl;
+package com.example.bookstoreapi.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.bookstore.models.Book;
-import com.example.bookstore.repositories.BookRepository;
-import com.example.bookstore.services.BookService;
-import com.example.bookstore.utils.exceptions.SearchNotFoundException;
+import com.example.bookstoreapi.models.Book;
+import com.example.bookstoreapi.repositories.BookRepository;
+import com.example.bookstoreapi.services.BookService;
+import com.example.bookstoreapi.utils.exceptions.SearchNotFoundException;
 
 @Service
 public class BookServiceImpl implements BookService {

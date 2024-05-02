@@ -1,8 +1,8 @@
 spring:
   application:
-    name: bookstore
+    name: bookstoreapi
   datasource:
-    url: 'jdbc:h2:file:./db/h2/bookstore'
+    url: 'jdbc:h2:file:./db/h2/bookstoreapi'
     driverClassName: org.h2.Driver
     username: sa
   jpa:

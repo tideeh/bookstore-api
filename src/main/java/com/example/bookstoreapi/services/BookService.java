@@ -1,8 +1,8 @@
-package com.example.bookstore.services;
+package com.example.bookstoreapi.services;
 
 import java.util.List;
 
-import com.example.bookstore.models.Book;
+import com.example.bookstoreapi.models.Book;
 
 public interface BookService {
 

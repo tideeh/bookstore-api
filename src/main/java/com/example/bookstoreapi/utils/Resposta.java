@@ -1,4 +1,4 @@
-package com.example.bookstore.utils;
+package com.example.bookstoreapi.utils;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
