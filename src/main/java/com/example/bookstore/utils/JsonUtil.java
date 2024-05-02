@@ -1,4 +1,4 @@
-package com.example.helloworld.utils;
+package com.example.bookstore.utils;
 
 import com.google.gson.Gson;
 

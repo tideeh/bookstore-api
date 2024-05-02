@@ -1,4 +1,4 @@
-package com.example.helloworld.controllers;
+package com.example.bookstore.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.helloworld.models.Book;
-import com.example.helloworld.services.BookService;
-import com.example.helloworld.utils.JsonUtil;
-import com.example.helloworld.utils.Resposta;
-import com.example.helloworld.vo.BookVO;
+import com.example.bookstore.models.Book;
+import com.example.bookstore.services.BookService;
+import com.example.bookstore.utils.JsonUtil;
+import com.example.bookstore.utils.Resposta;
+import com.example.bookstore.vo.BookVO;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

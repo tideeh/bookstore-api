@@ -1,4 +1,4 @@
-package com.example.helloworld.models;
+package com.example.bookstore.models;
 
 import java.time.LocalDateTime;
 

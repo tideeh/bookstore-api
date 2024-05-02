@@ -1,38 +1,34 @@
-package com.example.helloworld.models;
+package com.example.bookstore.vo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import java.util.Objects;
 
-@Table(name = "BOOKS")
-@Entity
-public class Book extends BaseEntity {
+public class BookVO {
 
-	@Column(name = "TITLE")
+	private Long id;
 	private String title;
-
-	@Column(name = "AUTHOR")
 	private String author;
-
-	@Column(name = "CATEGORY")
 	private String category;
-
-	@Column(name = "LANGUAGE")
 	private String language;
-
-	@Column(name = "PRICE")
 	private float price;
 
-	public Book() {
+	public BookVO() {
 	}
 
-	public Book(String title, String author, String category, String language, float price) {
+	public BookVO(Long id, String title, String author, String category, String language, float price) {
+		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.category = category;
 		this.language = language;
 		this.price = price;
+	}
+
+	public Long getId() {
+		return this.id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -79,18 +75,18 @@ public class Book extends BaseEntity {
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
-		if (!(o instanceof Book)) {
+		if (!(o instanceof BookVO)) {
 			return false;
 		}
-		Book book = (Book) o;
-		return Objects.equals(getId(), book.getId()) && Objects.equals(title, book.title)
-				&& Objects.equals(author, book.author) && Objects.equals(category, book.category)
-				&& Objects.equals(language, book.language) && price == book.price;
+		BookVO bookVO = (BookVO) o;
+		return Objects.equals(id, bookVO.id) && Objects.equals(title, bookVO.title)
+				&& Objects.equals(author, bookVO.author) && Objects.equals(category, bookVO.category)
+				&& Objects.equals(language, bookVO.language) && price == bookVO.price;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), title, author, category, language, price);
+		return Objects.hash(id, title, author, category, language, price);
 	}
 
 	@Override

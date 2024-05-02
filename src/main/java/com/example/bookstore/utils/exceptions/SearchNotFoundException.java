@@ -1,4 +1,4 @@
-package com.example.helloworld.utils.exceptions;
+package com.example.bookstore.utils.exceptions;
 
 public class SearchNotFoundException extends RuntimeException {
 
