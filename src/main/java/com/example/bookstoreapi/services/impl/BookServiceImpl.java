@@ -32,13 +32,23 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<Book> findAll(String title) {
+	public List<Book> findAll(String title, String order) {
 		List<Book> bookList = new ArrayList<>();
 
+		Boolean orderDesc = false;
+		if(order != null && order.trim().toLowerCase().equals("desc"))
+			orderDesc = true;
+		
 		if (title == null || title.isEmpty() || title.isBlank()) {
-			bookList = bookRepository.findAll();
+			if(orderDesc)
+				bookList = bookRepository.findAllByOrderByIdDesc();
+			else
+				bookList = bookRepository.findAllByOrderByIdAsc();
 		} else {
-			bookList = bookRepository.findByTitleIgnoreCase(title);
+			if(orderDesc)
+				bookList = bookRepository.findByTitleIgnoreCaseOrderByIdDesc(title);
+			else
+				bookList = bookRepository.findByTitleIgnoreCaseOrderByIdAsc(title);
 		}
 
 		return bookList;

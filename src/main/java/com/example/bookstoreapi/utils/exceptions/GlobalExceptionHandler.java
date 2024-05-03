@@ -12,7 +12,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler({SearchNotFoundException.class})
 	public ResponseEntity<Resposta> SearchNotFoundException(SearchNotFoundException exception) {
-		Resposta resposta = Resposta.setRetornoERRO(exception.getMessage());
+		Resposta resposta = Resposta.setRetornoERRO(exception);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
 	}
 

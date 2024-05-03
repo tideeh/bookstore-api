@@ -31,8 +31,8 @@ public class BookController {
 	private BookService bookService;
 
 	@GetMapping(value = { "", "/" })
-	public ResponseEntity<Resposta> getAllBooks(@RequestParam(value = "title", required = false) String title) {
-		List<Book> bookList = bookService.findAll(title);
+	public ResponseEntity<Resposta> getAllBooks(@RequestParam(value = "title", required = false) String title, @RequestParam(value = "order", required = false) String order) {
+		List<Book> bookList = bookService.findAll(title, order);
 		List<BookVO> bookVOList = new ArrayList<>();
 		for (Book book : bookList) {
 			bookVOList.add(JsonUtil.jsonToObject(book.toString(), BookVO.class));

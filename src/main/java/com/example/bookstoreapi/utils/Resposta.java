@@ -41,6 +41,7 @@ public class Resposta {
 		Resposta resposta = new Resposta();
 		resposta.setCodigo(RETORNO_ERRO);
 		resposta.setMensagem(mensagem);
+		resposta.setErro(mensagem);
 		return resposta;
 	}
 
