@@ -19,6 +19,7 @@ import com.example.bookstoreapi.utils.Resposta;
 import com.example.bookstoreapi.vo.BookVO;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -55,6 +56,22 @@ public class BookController {
 	public ResponseEntity<Resposta> createBook(@RequestBody Book book) {
 		Book bookSaved = bookService.save(book);
 		BookVO bookVO = JsonUtil.jsonToObject(bookSaved.toString(), BookVO.class);
+		Resposta resposta = Resposta.setRetornoOK(bookVO);
+		return ResponseEntity.ok(resposta);
+	}
+
+	@PutMapping(value = { "/{id}" })
+	public ResponseEntity<Resposta> updateBookById(@PathVariable(required = true) Long id, @RequestBody Book newBook) {
+		Book book = bookService.findById(id);
+
+		book.setTitle(newBook.getTitle());
+		book.setAuthor(newBook.getAuthor());
+		book.setCategory(newBook.getCategory());
+		book.setLanguage(newBook.getLanguage());
+		book.setPrice(newBook.getPrice());
+		book = bookService.save(book);
+
+		BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
 		Resposta resposta = Resposta.setRetornoOK(bookVO);
 		return ResponseEntity.ok(resposta);
 	}
