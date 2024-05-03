@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
 	public List<Book> findAll(String title) {
 		List<Book> bookList = new ArrayList<>();
 
-		if (title == null) {
+		if (title == null || title.isEmpty() || title.isBlank()) {
 			bookList = bookRepository.findAll();
 		} else {
 			bookList = bookRepository.findByTitleIgnoreCase(title);
@@ -52,6 +52,16 @@ public class BookServiceImpl implements BookService {
 			);
 		
 		bookRepository.delete(book);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		bookRepository.findById(id)
+			.orElseThrow(
+				() -> new SearchNotFoundException("Book not found with the given ID.")
+			);
+		
+		bookRepository.deleteById(id);
 	}
 
 }

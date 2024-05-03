@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,32 +24,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("api/v1/books")
+@CrossOrigin(origins = "*")
 public class BookController {
 
 	@Autowired
 	private BookService bookService;
 
-	@GetMapping(value = {"", "/", "/{id}"})
-	public ResponseEntity<Resposta> getBookById(@PathVariable(required = false) Long id, @RequestParam(value = "title", required = false) String title) {
-		Resposta resposta;
-
-		if(id != null) {
-			Book book = bookService.findById(id);
-			BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
-			resposta = Resposta.setRetornoOK(bookVO);
-		} else {
-			List<Book> bookList = bookService.findAll(title);
-			List<BookVO> bookVOList = new ArrayList<>();
-			for (Book book : bookList) {
-				bookVOList.add(JsonUtil.jsonToObject(book.toString(), BookVO.class));
-			}
-			resposta = Resposta.setRetornoOK(bookVOList);
+	@GetMapping(value = { "", "/" })
+	public ResponseEntity<Resposta> getAllBooks(@RequestParam(value = "title", required = false) String title) {
+		List<Book> bookList = bookService.findAll(title);
+		List<BookVO> bookVOList = new ArrayList<>();
+		for (Book book : bookList) {
+			bookVOList.add(JsonUtil.jsonToObject(book.toString(), BookVO.class));
 		}
-		
+
+		Resposta resposta = Resposta.setRetornoOK(bookVOList);
 		return ResponseEntity.ok(resposta);
 	}
 
-	@PostMapping(value = {"", "/"})
+	@GetMapping(value = { "/{id}" })
+	public ResponseEntity<Resposta> getBookById(@PathVariable(required = true) Long id) {
+		Book book = bookService.findById(id);
+		BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
+
+		Resposta resposta = Resposta.setRetornoOK(bookVO);
+		return ResponseEntity.ok(resposta);
+	}
+
+	@PostMapping(value = { "", "/" })
 	public ResponseEntity<Resposta> createBook(@RequestBody Book book) {
 		Book bookSaved = bookService.save(book);
 		BookVO bookVO = JsonUtil.jsonToObject(bookSaved.toString(), BookVO.class);
@@ -56,9 +59,17 @@ public class BookController {
 		return ResponseEntity.ok(resposta);
 	}
 
-	@DeleteMapping(value = {"", "/"})
+	@DeleteMapping(value = { "", "/" })
 	public ResponseEntity<Resposta> deleteBook(@RequestBody Book book) {
 		bookService.delete(book);
+
+		Resposta resposta = Resposta.setRetornoOK();
+		return ResponseEntity.ok(resposta);
+	}
+
+	@DeleteMapping(value = { "/{id}" })
+	public ResponseEntity<Resposta> deleteBookById(@PathVariable(required = true) Long id) {
+		bookService.deleteById(id);
 
 		Resposta resposta = Resposta.setRetornoOK();
 		return ResponseEntity.ok(resposta);
@@ -70,12 +81,12 @@ public class BookController {
 
 		for (Book book : bookList) {
 			Book bookSaved = bookService.save(book);
-			if(bookSaved != null) {
+			if (bookSaved != null) {
 				count++;
 			}
 		}
 
-		Resposta resposta = Resposta.setRetornoOK("Total of "+count+" Books were created");
+		Resposta resposta = Resposta.setRetornoOK("Total of " + count + " Books were created");
 		return ResponseEntity.ok(resposta);
 	}
 
