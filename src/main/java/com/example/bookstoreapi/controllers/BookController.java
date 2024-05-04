@@ -31,7 +31,7 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 
-	@GetMapping(value = { "", "/" })
+	@GetMapping(value = { "" })
 	public ResponseEntity<Resposta> getAllBooks(@RequestParam(value = "title", required = false) String title, @RequestParam(value = "order", required = false) String order) {
 		List<Book> bookList = bookService.findAll(title, order);
 		List<BookVO> bookVOList = new ArrayList<>();
@@ -52,7 +52,7 @@ public class BookController {
 		return ResponseEntity.ok(resposta);
 	}
 
-	@PostMapping(value = { "", "/" })
+	@PostMapping(value = { "" })
 	public ResponseEntity<Resposta> createBook(@RequestBody Book book) {
 		Book bookSaved = bookService.save(book);
 		BookVO bookVO = JsonUtil.jsonToObject(bookSaved.toString(), BookVO.class);
@@ -76,7 +76,7 @@ public class BookController {
 		return ResponseEntity.ok(resposta);
 	}
 
-	@DeleteMapping(value = { "", "/" })
+	@DeleteMapping(value = { "" })
 	public ResponseEntity<Resposta> deleteBook(@RequestBody Book book) {
 		bookService.delete(book);
 
