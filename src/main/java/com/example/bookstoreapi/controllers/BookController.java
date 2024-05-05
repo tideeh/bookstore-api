@@ -1,9 +1,9 @@
 package com.example.bookstoreapi.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,14 +32,21 @@ public class BookController {
 	private BookService bookService;
 
 	@GetMapping(value = { "" })
-	public ResponseEntity<Resposta> getAllBooks(@RequestParam(value = "title", required = false) String title, @RequestParam(value = "order", required = false) String order) {
-		List<Book> bookList = bookService.findAll(title, order);
-		List<BookVO> bookVOList = new ArrayList<>();
-		for (Book book : bookList) {
-			bookVOList.add(JsonUtil.jsonToObject(book.toString(), BookVO.class));
-		}
+	public ResponseEntity<Resposta> getAllBooks(
+		@RequestParam(value = "title", required = false)	String title,
+		@RequestParam(value = "page",  required = false)	String page,
+		@RequestParam(value = "size",  required = false)	String size,
+		@RequestParam(value = "order", required = false)	String order
+	) {
 
-		Resposta resposta = Resposta.setRetornoOK(bookVOList);
+		Page<Book> pageBooks = bookService.findAll(title, page, size, order);
+		
+		Page<BookVO> pageBookVO = pageBooks.map((book) -> {
+			BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
+			return bookVO;
+		});
+
+		Resposta resposta = Resposta.setRetornoOK(pageBookVO);
 		return ResponseEntity.ok(resposta);
 	}
 
