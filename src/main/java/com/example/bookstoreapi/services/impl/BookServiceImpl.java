@@ -42,7 +42,8 @@ public class BookServiceImpl implements BookService {
 		int sizeInt = NumberUtil.getIntOrValue(size, (int) totalBooks);
 		sizeInt = sizeInt < 1 ? 1 : sizeInt;
 
-		Pageable pageable = PageRequest.of(pageInt, sizeInt, order.equals("desc") ? Sort.by("id").descending() : Sort.by("id").ascending());
+		Sort sort =  (order != null && order.trim().toLowerCase().equals("desc")) ? Sort.by("id").descending() : Sort.by("id").ascending();
+		Pageable pageable = PageRequest.of(pageInt, sizeInt, sort);
 		
 		Page<Book> pageBooks;
 		if (title == null || title.isEmpty() || title.isBlank()) {
