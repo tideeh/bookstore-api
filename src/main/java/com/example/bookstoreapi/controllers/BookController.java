@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bookstoreapi.models.Book;
 import com.example.bookstoreapi.services.BookService;
-import com.example.bookstoreapi.utils.JsonUtil;
 import com.example.bookstoreapi.utils.Resposta;
 import com.example.bookstoreapi.vo.BookVO;
 
@@ -32,85 +35,63 @@ public class BookController {
 	private BookService bookService;
 
 	@GetMapping(value = { "" })
-	public ResponseEntity<Resposta> getAllBooks(
-		@RequestParam(value = "title", required = false)	String title,
-		@RequestParam(value = "page",  required = false)	String page,
-		@RequestParam(value = "size",  required = false)	String size,
-		@RequestParam(value = "order", required = false)	String order
+	public ResponseEntity<Resposta<Page<BookVO>>> getAllBooks(
+				@RequestParam(value = "title", required = false)	String title,
+				@RequestParam(value = "page",  required = false, defaultValue = "0")	Integer page,
+				@RequestParam(value = "size",  required = false, defaultValue = "10")	Integer size,
+				@RequestParam(value = "order", required = false, defaultValue = "asc")	String order
 	) {
 
-		Page<Book> pageBooks = bookService.findAll(title, page, size, order);
-		
-		Page<BookVO> pageBookVO = pageBooks.map((book) -> {
-			BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
-			return bookVO;
-		});
+		Direction sortDirection = "desc".equalsIgnoreCase(order) ? Direction.DESC : Direction.ASC;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
 
-		Resposta resposta = Resposta.setRetornoOK(pageBookVO);
+		Resposta<Page<BookVO>> resposta;
+		if(title != null)
+			resposta = Resposta.setRetornoOK(bookService.findByTitleContaining(title, pageable));
+		else
+			resposta = Resposta.setRetornoOK(bookService.findAll(pageable));
+		
 		return ResponseEntity.ok(resposta);
 	}
 
 	@GetMapping(value = { "/{id}" })
-	public ResponseEntity<Resposta> getBookById(@PathVariable(required = true) Long id) {
-		Book book = bookService.findById(id);
-		BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
-
-		Resposta resposta = Resposta.setRetornoOK(bookVO);
+	public ResponseEntity<Resposta<BookVO>> getBookById(@PathVariable(required = true) Long id) {
+		Resposta<BookVO> resposta = Resposta.setRetornoOK(bookService.findById(id));
 		return ResponseEntity.ok(resposta);
 	}
 
 	@PostMapping(value = { "" })
-	public ResponseEntity<Resposta> createBook(@RequestBody Book book) {
-		Book bookSaved = bookService.save(book);
-		BookVO bookVO = JsonUtil.jsonToObject(bookSaved.toString(), BookVO.class);
-		Resposta resposta = Resposta.setRetornoOK(bookVO);
+	public ResponseEntity<Resposta<BookVO>> createBook(@RequestBody Book book) {
+		Resposta<BookVO> resposta = Resposta.setRetornoOK(bookService.create(book));
 		return ResponseEntity.ok(resposta);
 	}
 
-	@PutMapping(value = { "/{id}" })
-	public ResponseEntity<Resposta> updateBookById(@PathVariable(required = true) Long id, @RequestBody Book newBook) {
-		Book book = bookService.findById(id);
-
-		book.setTitle(newBook.getTitle());
-		book.setAuthor(newBook.getAuthor());
-		book.setCategory(newBook.getCategory());
-		book.setLanguage(newBook.getLanguage());
-		book.setPrice(newBook.getPrice());
-		book = bookService.save(book);
-
-		BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
-		Resposta resposta = Resposta.setRetornoOK(bookVO);
-		return ResponseEntity.ok(resposta);
-	}
-
-	@DeleteMapping(value = { "" })
-	public ResponseEntity<Resposta> deleteBook(@RequestBody Book book) {
-		bookService.delete(book);
-
-		Resposta resposta = Resposta.setRetornoOK();
+	@PutMapping(value = { "" })
+	public ResponseEntity<Resposta<BookVO>> updateBook(@RequestBody Book book) {
+		Resposta<BookVO> resposta = Resposta.setRetornoOK(bookService.update(book));
 		return ResponseEntity.ok(resposta);
 	}
 
 	@DeleteMapping(value = { "/{id}" })
-	public ResponseEntity<Resposta> deleteBookById(@PathVariable(required = true) Long id) {
+	public ResponseEntity<Resposta<?>> deleteBookById(@PathVariable(required = true) Long id) {
 		bookService.deleteById(id);
 
-		Resposta resposta = Resposta.setRetornoOK();
+		Resposta<?> resposta = Resposta.setRetornoOK();
 		return ResponseEntity.ok(resposta);
 	}
 
 	@PostMapping("/create-many")
-	public ResponseEntity<Resposta> createBooks(@RequestBody List<Book> bookList) {
+	public ResponseEntity<Resposta<?>> createBooks(@RequestBody List<Book> bookList) {
 		int count = 0;
 
 		for (Book book : bookList) {
-			Book bookSaved = bookService.save(book);
-			if (bookSaved != null) {
+			BookVO bookVOSaved = bookService.create(book);
+			if (bookVOSaved != null) {
 				count++;
 			}
 		}
 
-		Resposta resposta = Resposta.setRetornoOK("Total of " + count + " Books were created");
+		Resposta<?> resposta = Resposta.setRetornoOK("Total of " + count + " Books were created");
 		return ResponseEntity.ok(resposta);
 	}
 

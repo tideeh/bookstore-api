@@ -1,18 +1,21 @@
 package com.example.bookstoreapi.services;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.example.bookstoreapi.models.Book;
+import com.example.bookstoreapi.vo.BookVO;
 
 public interface BookService {
 
-	Book save(Book book);
+	BookVO create(Book newBook);
 
-	Book findById(Long id);
+	BookVO findById(Long id);
 
-	Page<Book> findAll(String title, String page, String size, String order);
+	Page<BookVO> findAll(Pageable pageable);
+	Page<BookVO> findByTitleContaining(String title, Pageable pageable);
 
-	void delete(Book book);
+	BookVO update(Book newBook);
 
 	void deleteById(Long id);
 }

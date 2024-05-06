@@ -11,14 +11,20 @@ import com.example.bookstoreapi.utils.Resposta;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler({SearchNotFoundException.class})
-	public ResponseEntity<Resposta> SearchNotFoundException(SearchNotFoundException exception) {
-		Resposta resposta = Resposta.setRetornoERRO(exception);
+	public ResponseEntity<Resposta<SearchNotFoundException>> SearchNotFoundException(SearchNotFoundException exception) {
+		Resposta<SearchNotFoundException> resposta = Resposta.setRetornoERRO(exception);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
+	}
+
+	@ExceptionHandler({RequiredObjectIsNullException.class})
+	public ResponseEntity<Resposta<RequiredObjectIsNullException>> RequiredObjectIsNullException(RequiredObjectIsNullException exception) {
+		Resposta<RequiredObjectIsNullException> resposta = Resposta.setRetornoERRO(exception);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
 	}
 
 	@ExceptionHandler({RuntimeException.class})
-	public ResponseEntity<Resposta> handleRuntimeException(RuntimeException exception) {
-		Resposta resposta = Resposta.setRetornoERRO(exception);
+	public ResponseEntity<Resposta<RuntimeException>> handleRuntimeException(RuntimeException exception) {
+		Resposta<RuntimeException> resposta = Resposta.setRetornoERRO(exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resposta);
     }
 	
