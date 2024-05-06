@@ -6,94 +6,94 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.bookstoreapi.models.Book;
+import com.example.bookstoreapi.models.vo.BookVO;
 import com.example.bookstoreapi.repositories.BookRepository;
 import com.example.bookstoreapi.services.BookService;
 import com.example.bookstoreapi.utils.JsonUtil;
 import com.example.bookstoreapi.utils.exceptions.RequiredObjectIsNullException;
 import com.example.bookstoreapi.utils.exceptions.SearchNotFoundException;
-import com.example.bookstoreapi.vo.BookVO;
 
 @Service
 public class BookServiceImpl implements BookService {
 
 	@Autowired
-	private BookRepository bookRepository;
+	private BookRepository repository;
 
 	@Override
-	public BookVO create(Book newBook) {
-		if(newBook == null)
-            throw new RequiredObjectIsNullException("It is not allowed to create a null object!");
+	public BookVO create(Book newEntity) {
+		if(newEntity == null)
+            throw new RequiredObjectIsNullException("It is not allowed to create a null "+Book.class.getSimpleName()+"!");
 		
-		Book bookSaved = bookRepository.save(newBook);
+		Book entitySaved = repository.save(newEntity);
 
-		BookVO bookVO = JsonUtil.jsonToObject(bookSaved.toString(), BookVO.class);
-		return bookVO;
+		BookVO entityVO = JsonUtil.jsonToObject(entitySaved.toString(), BookVO.class);
+		return entityVO;
 	}
 
 	@Override
 	public BookVO findById(Long id) {
-		Book book = bookRepository.findById(id)
+		Book entity = repository.findById(id)
 			.orElseThrow(
-				() -> new SearchNotFoundException("Book not found with the given ID.")
+				() -> new SearchNotFoundException(Book.class.getSimpleName()+" not found with the given ID!")
 			);
 
-		BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
-		return bookVO;
+		BookVO entityVO = JsonUtil.jsonToObject(entity.toString(), BookVO.class);
+		return entityVO;
 	}
 
 	@Override
 	public Page<BookVO> findAll(Pageable pageable) {
-		Page<Book> pageBooks = bookRepository.findAll(pageable);
+		Page<Book> pageEntity = repository.findAll(pageable);
 		
-		Page<BookVO> pageBooksVO = pageBooks.map((book) -> {
-			BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
-			return bookVO;
+		Page<BookVO> pageEntityVO = pageEntity.map((entity) -> {
+			BookVO entityVO = JsonUtil.jsonToObject(entity.toString(), BookVO.class);
+			return entityVO;
 		});
 
-		return pageBooksVO;
+		return pageEntityVO;
 	}
 
 	@Override
 	public Page<BookVO> findByTitleContaining(String title, Pageable pageable) {
-		Page<Book> pageBooks = bookRepository.findByTitleContaining(title, pageable);
+		Page<Book> pageEntity = repository.findByTitleContaining(title, pageable);
 		
-		Page<BookVO> pageBooksVO = pageBooks.map((book) -> {
-			BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
-			return bookVO;
+		Page<BookVO> pageEntityVO = pageEntity.map((entity) -> {
+			BookVO entityVO = JsonUtil.jsonToObject(entity.toString(), BookVO.class);
+			return entityVO;
 		});
 
-		return pageBooksVO;
+		return pageEntityVO;
 	}
 
 	@Override
-	public BookVO update(Book newBook) {
-		if(newBook == null)
-            throw new RequiredObjectIsNullException("It is not allowed to update a null object!");
+	public BookVO update(Book newEntity) {
+		if(newEntity == null)
+            throw new RequiredObjectIsNullException("It is not allowed to update a null "+Book.class.getSimpleName()+"!");
 
-		Book book = bookRepository.findById(newBook.getId())
+		Book entity = repository.findById(newEntity.getId())
 			.orElseThrow(
-				() -> new SearchNotFoundException("Book not found with the given ID.")
+				() -> new SearchNotFoundException(Book.class.getSimpleName()+" not found with the given ID!")
 			);
 		
-		book.setTitle(newBook.getTitle());
-		book.setAuthor(newBook.getAuthor());
-		book.setCategory(newBook.getCategory());
-		book.setLanguage(newBook.getLanguage());
-		book.setPrice(newBook.getPrice());
-		book = bookRepository.save(book);
+		entity.setTitle(newEntity.getTitle());
+		entity.setAuthor(newEntity.getAuthor());
+		entity.setCategory(newEntity.getCategory());
+		entity.setLanguage(newEntity.getLanguage());
+		entity.setPrice(newEntity.getPrice());
+		entity = repository.save(entity);
 
-		BookVO bookVO = JsonUtil.jsonToObject(book.toString(), BookVO.class);
-		return bookVO;
+		BookVO entityVO = JsonUtil.jsonToObject(entity.toString(), BookVO.class);
+		return entityVO;
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		bookRepository.findById(id)
+		repository.findById(id)
 			.orElseThrow(
-				() -> new SearchNotFoundException("Book not found with the given ID.")
+				() -> new SearchNotFoundException(Book.class.getSimpleName()+" not found with the given ID!")
 			);
 		
-		bookRepository.deleteById(id);
+		repository.deleteById(id);
 	}
 
 }

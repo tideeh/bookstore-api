@@ -1,4 +1,4 @@
-package com.example.bookstoreapi.vo;
+package com.example.bookstoreapi.models.vo;
 
 import java.util.Objects;
 

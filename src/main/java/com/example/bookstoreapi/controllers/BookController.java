@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bookstoreapi.models.Book;
+import com.example.bookstoreapi.models.vo.BookVO;
 import com.example.bookstoreapi.services.BookService;
 import com.example.bookstoreapi.utils.Resposta;
-import com.example.bookstoreapi.vo.BookVO;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,66 +32,63 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BookController {
 
 	@Autowired
-	private BookService bookService;
+	private BookService service;
 
 	@GetMapping(value = { "" })
-	public ResponseEntity<Resposta<Page<BookVO>>> getAllBooks(
-				@RequestParam(value = "title", required = false)	String title,
-				@RequestParam(value = "page",  required = false, defaultValue = "0")	Integer page,
-				@RequestParam(value = "size",  required = false, defaultValue = "10")	Integer size,
-				@RequestParam(value = "order", required = false, defaultValue = "asc")	String order
-	) {
+	public ResponseEntity<Resposta<Page<BookVO>>> getAll(
+			@RequestParam(value = "title", required = false) String title,
+			@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+			@RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+			@RequestParam(value = "order", required = false, defaultValue = "asc") String order) {
 
 		Direction sortDirection = "desc".equalsIgnoreCase(order) ? Direction.DESC : Direction.ASC;
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
 
 		Resposta<Page<BookVO>> resposta;
-		if(title != null)
-			resposta = Resposta.setRetornoOK(bookService.findByTitleContaining(title, pageable));
+		if (title != null)
+			resposta = Resposta.setRetornoOK(service.findByTitleContaining(title, pageable));
 		else
-			resposta = Resposta.setRetornoOK(bookService.findAll(pageable));
-		
+			resposta = Resposta.setRetornoOK(service.findAll(pageable));
+
 		return ResponseEntity.ok(resposta);
 	}
 
 	@GetMapping(value = { "/{id}" })
-	public ResponseEntity<Resposta<BookVO>> getBookById(@PathVariable(required = true) Long id) {
-		Resposta<BookVO> resposta = Resposta.setRetornoOK(bookService.findById(id));
+	public ResponseEntity<Resposta<BookVO>> getById(@PathVariable(required = true) Long id) {
+		Resposta<BookVO> resposta = Resposta.setRetornoOK(service.findById(id));
 		return ResponseEntity.ok(resposta);
 	}
 
 	@PostMapping(value = { "" })
-	public ResponseEntity<Resposta<BookVO>> createBook(@RequestBody Book book) {
-		Resposta<BookVO> resposta = Resposta.setRetornoOK(bookService.create(book));
+	public ResponseEntity<Resposta<BookVO>> create(@RequestBody Book entity) {
+		Resposta<BookVO> resposta = Resposta.setRetornoOK(service.create(entity));
 		return ResponseEntity.ok(resposta);
 	}
 
 	@PutMapping(value = { "" })
-	public ResponseEntity<Resposta<BookVO>> updateBook(@RequestBody Book book) {
-		Resposta<BookVO> resposta = Resposta.setRetornoOK(bookService.update(book));
+	public ResponseEntity<Resposta<BookVO>> update(@RequestBody Book entity) {
+		Resposta<BookVO> resposta = Resposta.setRetornoOK(service.update(entity));
 		return ResponseEntity.ok(resposta);
 	}
 
 	@DeleteMapping(value = { "/{id}" })
-	public ResponseEntity<Resposta<?>> deleteBookById(@PathVariable(required = true) Long id) {
-		bookService.deleteById(id);
-
+	public ResponseEntity<Resposta<?>> deleteById(@PathVariable(required = true) Long id) {
+		service.deleteById(id);
 		Resposta<?> resposta = Resposta.setRetornoOK();
 		return ResponseEntity.ok(resposta);
 	}
 
 	@PostMapping("/create-many")
-	public ResponseEntity<Resposta<?>> createBooks(@RequestBody List<Book> bookList) {
+	public ResponseEntity<Resposta<?>> createMany(@RequestBody List<Book> entityList) {
 		int count = 0;
-
-		for (Book book : bookList) {
-			BookVO bookVOSaved = bookService.create(book);
-			if (bookVOSaved != null) {
+		for (Book entity : entityList) {
+			BookVO entityVOSaved = service.create(entity);
+			if (entityVOSaved != null) {
 				count++;
 			}
 		}
 
-		Resposta<?> resposta = Resposta.setRetornoOK("Total of " + count + " Books were created");
+		Resposta<?> resposta = Resposta.setRetornoOK("Total of " + count + " "+Book.class.getSimpleName()+"s were created!");
 		return ResponseEntity.ok(resposta);
 	}
 
