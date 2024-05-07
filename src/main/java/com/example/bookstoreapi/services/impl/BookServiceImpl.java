@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Page<BookVO> findByTitleContaining(String title, Pageable pageable) {
-		Page<Book> pageEntity = repository.findByTitleContaining(title, pageable);
+		Page<Book> pageEntity = repository.findByTitleContainingIgnoreCase(title, pageable);
 		
 		Page<BookVO> pageEntityVO = pageEntity.map((entity) -> {
 			BookVO entityVO = JsonUtil.jsonToObject(entity.toString(), BookVO.class);

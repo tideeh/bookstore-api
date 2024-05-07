@@ -10,16 +10,16 @@ import java.util.Objects;
 public class Book extends BaseEntity {
 
 	@Column(name = "TITLE")
-	private String title;
+	private String title = "";
 
 	@Column(name = "AUTHOR")
-	private String author;
+	private String author = "";
 
 	@Column(name = "CATEGORY")
-	private String category;
+	private String category = "";
 
 	@Column(name = "LANGUAGE")
-	private String language;
+	private String language = "";
 
 	@Column(name = "PRICE")
 	private float price;

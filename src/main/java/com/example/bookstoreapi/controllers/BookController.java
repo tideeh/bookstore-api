@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,11 +41,11 @@ public class BookController {
 			@RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
 			@RequestParam(value = "order", required = false, defaultValue = "asc") String order) {
 
-		Direction sortDirection = "desc".equalsIgnoreCase(order) ? Direction.DESC : Direction.ASC;
-		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+		Order sortOrder = "desc".equalsIgnoreCase(order) ? Sort.Order.desc("title") : Sort.Order.asc("title");
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortOrder.ignoreCase()));
 
 		Resposta<Page<BookVO>> resposta;
-		if (title != null)
+		if (title != null && !title.isEmpty())
 			resposta = Resposta.setRetornoOK(service.findByTitleContaining(title, pageable));
 		else
 			resposta = Resposta.setRetornoOK(service.findAll(pageable));

@@ -10,5 +10,5 @@ import com.example.bookstoreapi.models.Book;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-	Page<Book> findByTitleContaining(String title, Pageable pageable);
+	Page<Book> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 }
