@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.bookstoreapi.models.Book;
 import com.example.bookstoreapi.models.vo.BookVO;
 import com.example.bookstoreapi.services.BookService;
+import com.example.bookstoreapi.utils.MediaType;
 import com.example.bookstoreapi.utils.Resposta;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,14 +30,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
-@RequestMapping("api/v1/books")
 @CrossOrigin(origins = "*")
+@Tag(name = "Books", description = "Endpoints for managing Books")
+@RequestMapping("/api/books/v1")
 public class BookController {
 
 	@Autowired
 	private BookService service;
 
-	@GetMapping(value = { "" })
+	@GetMapping(
+		value = "",
+		produces = { MediaType.APPLICATION_JSON_VALUE }
+	)
 	public ResponseEntity<Resposta<Page<BookVO>>> getAll(
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,

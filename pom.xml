@@ -14,10 +14,22 @@
 	<name>bookstoreapi</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>17</java.version>
 		<start-class>com.example.bookstoreapi.BookstoreApiApplication</start-class>
+		<java.version>17</java.version>
+		<java-jwt.version>4.2.2</java-jwt.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>${java-jwt.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springdoc</groupId>
